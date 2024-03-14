@@ -3,7 +3,12 @@
 	min-height: 100vh;
 	display: grid;
 }
-
+html,
+body,
+.App,
+.CardsContainer {
+	overflow-x: hidden;
+}
 @media (prefers-reduced-motion: no-preference) {
 	.App-logo {
 		animation: App-logo-spin infinite 20s linear;

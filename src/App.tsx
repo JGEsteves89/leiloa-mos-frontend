@@ -126,6 +126,9 @@ function AuctionCard({ auction }: any) {
 						marginBottom: '0.5rem',
 					}}>
 					<p style={{ textAlign: 'justify' }}>{auction.leiloesDescription}</p>
+					<a href={auction.link} target="_blank" rel="noopener noreferrer">
+						Open website
+					</a>
 				</CollapsibleSection>
 				{showImageViewer !== -1 && (
 					<ImagesViewer images={auction.images} showImageViewer={showImageViewer} setShowImageViewer={setShowImageViewer} />
@@ -163,7 +166,7 @@ function MyNavBar({ setTypeFilter, setFilters, filters }: any) {
 			<Row>
 				<Navbar.Brand href="#home">Leiloa-mos</Navbar.Brand>
 			</Row>
-			<Row>
+			<Row style={{ marginInline: '0.2rem' }}>
 				<ButtonGroup size="sm">
 					<TypeButton type={'Imóvel'} />
 					<TypeButton type={'Veículo'} />
