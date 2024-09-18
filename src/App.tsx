@@ -56,6 +56,7 @@ const CollapsibleSection = ({ title, children }: any) => {
 	);
 };
 const ScrollableImageRow = ({ imagesList, height, onClick }: any) => {
+	console.log(imagesList)
 	return (
 		<div
 			style={{
@@ -250,10 +251,13 @@ function App() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch('https://raw.githubusercontent.com/JGEsteves89/leiloa-mos-frontend/main/data/leiloamos.json')
+		fetch('https://raw.githubusercontent.com/JGEsteves89/leiloa-mos-frontend/main/data/leiloamos.json',{cache: 'no-cache'})
 			.then((res) => res.json())
 			.then((allData) => {
 				console.log('Fetched ', allData.length, 'lots for auction');
+				for(const entry of allData){
+					entry.images = JSON.parse(entry.images)
+				}
 				setData(allData);
 				setLoading(false);
 			});
