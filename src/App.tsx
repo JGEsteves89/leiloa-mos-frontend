@@ -56,7 +56,6 @@ const CollapsibleSection = ({ title, children }: any) => {
 	);
 };
 const ScrollableImageRow = ({ imagesList, height, onClick }: any) => {
-	console.log(imagesList)
 	return (
 		<div
 			style={{
@@ -148,8 +147,12 @@ const emojiDic: { [id: string]: string } = {
 	Direito: '🧑‍⚖️',
 };
 //className="bg-body-tertiary justify-content-between"
-function MyNavBar({ setTypeFilter, setFilters, filters }: any) {
+function MyNavBar({ setTypeFilter, setFilters, filters, currentFilter }: any) {
 	const [buttonOn, setButtonOn] = useState(null);
+	// Sync buttonOn state with currentFilter (especially useful for back/forward navigation)
+	useEffect(() => {
+		setButtonOn(currentFilter);
+	}, [currentFilter]);
 	const TypeButton = ({ type }: any) => {
 		return (
 			<Button
@@ -199,7 +202,28 @@ function MyNavBar({ setTypeFilter, setFilters, filters }: any) {
 	);
 }
 function ImagesViewer({ showImageViewer, setShowImageViewer, images }: any) {
-	const handleClose = () => setShowImageViewer(-1);
+	const handleClose = () => {
+		setShowImageViewer(-1);
+		window.history.back(); // Go back to the previous state when modal is closed
+	};
+
+	// Handle back button event
+	useEffect(() => {
+		if (showImageViewer !== -1) {
+			// Push a new history state when the modal is shown
+			window.history.pushState(null, '', window.location.href);
+
+			// Handle browser back button to close the modal
+			const handlePopState = () => setShowImageViewer(-1);
+
+			window.addEventListener('popstate', handlePopState);
+
+			// Cleanup event listener on component unmount
+			return () => {
+				window.removeEventListener('popstate', handlePopState);
+			};
+		}
+	}, [showImageViewer, setShowImageViewer]);
 	return (
 		<>
 			<Modal
@@ -251,12 +275,12 @@ function App() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch('https://raw.githubusercontent.com/JGEsteves89/leiloa-mos-frontend/main/data/leiloamos.json',{cache: 'no-cache'})
+		fetch('https://raw.githubusercontent.com/JGEsteves89/leiloa-mos-frontend/main/data/leiloamos.json', { cache: 'no-cache' })
 			.then((res) => res.json())
 			.then((allData) => {
 				console.log('Fetched ', allData.length, 'lots for auction');
-				for(const entry of allData){
-					entry.images = JSON.parse(entry.images)
+				for (const entry of allData) {
+					entry.images = JSON.parse(entry.images);
 				}
 				setData(allData);
 				setLoading(false);
@@ -285,6 +309,30 @@ function App() {
 	useEffect(() => {
 		setCards(sortedCards.slice(0, lastIndexInView));
 	}, [lastIndexInView, sortedCards]);
+
+	// Function to update filter settings and push state to the browser's history
+	const setSortAndFilterSettingsWrapper = (newSettings: any) => {
+		setSortAndFilterSettings(newSettings);
+		// Push new settings into the history
+		window.history.pushState(newSettings, '', window.location.pathname);
+	};
+
+	// Handle back and forward navigation using the browser buttons
+	useEffect(() => {
+		const handlePopState = (event: PopStateEvent) => {
+			if (event.state) {
+				setSortAndFilterSettings(event.state);
+			}
+		};
+
+		// Listen for popstate event to handle back/forward navigation
+		window.addEventListener('popstate', handlePopState);
+
+		// Cleanup event listener when component unmounts
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
+	}, []);
 
 	useEffect(() => {
 		// Initialize IntersectionObserver
@@ -320,7 +368,6 @@ function App() {
 		};
 	}, [cards]);
 
-	console.log('Cards showing', cards.length);
 	return (
 		<div
 			className="App"
@@ -329,9 +376,10 @@ function App() {
 				color: 'white',
 			}}>
 			<MyNavBar
-				setTypeFilter={(typeFilter: any) => setSortAndFilterSettings({ ...sortAndFilterSettings, typeFilter })}
+				setTypeFilter={(typeFilter: any) => setSortAndFilterSettingsWrapper({ ...sortAndFilterSettings, typeFilter })}
 				setFilters={(filters: any) => setSortAndFilterSettings({ ...sortAndFilterSettings, filters })}
 				filters={sortAndFilterSettings.filters}
+				currentFilter = {sortAndFilterSettings.typeFilter}
 			/>
 			<div
 				className="CardsContainer"
