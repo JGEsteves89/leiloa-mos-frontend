@@ -250,7 +250,7 @@ function App() {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch('https://leiloa-mos.ijimiguel.workers.dev/api/leiloes')
+		fetch('https://raw.githubusercontent.com/JGEsteves89/leiloa-mos-frontend/main/data/leiloamos.json')
 			.then((res) => res.json())
 			.then((allData) => {
 				console.log('Fetched ', allData.length, 'lots for auction');
