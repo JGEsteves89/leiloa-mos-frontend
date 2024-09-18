@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/leiloa-mos-frontend/static/css/main.e3cb0e50.css",
-    "main.js": "/leiloa-mos-frontend/static/js/main.4b05ddc1.js",
+    "main.js": "/leiloa-mos-frontend/static/js/main.4ffcc0d0.js",
     "static/js/453.77cf7b9a.chunk.js": "/leiloa-mos-frontend/static/js/453.77cf7b9a.chunk.js",
     "index.html": "/leiloa-mos-frontend/index.html",
     "main.e3cb0e50.css.map": "/leiloa-mos-frontend/static/css/main.e3cb0e50.css.map",
-    "main.4b05ddc1.js.map": "/leiloa-mos-frontend/static/js/main.4b05ddc1.js.map",
+    "main.4ffcc0d0.js.map": "/leiloa-mos-frontend/static/js/main.4ffcc0d0.js.map",
     "453.77cf7b9a.chunk.js.map": "/leiloa-mos-frontend/static/js/453.77cf7b9a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e3cb0e50.css",
-    "static/js/main.4b05ddc1.js"
+    "static/js/main.4ffcc0d0.js"
   ]
 }
